@@ -10,7 +10,7 @@
     letter-spacing: 2px;
     text-align: center;
     color: #f35626;
-    background-image: -webkit-linear-gradient(#44079f, #f35626, #feab3a);
+    background-image: -webkit-linear-gradient(#44079f, red, #f35626, #feab3a, #f1fe3a);
     background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: hue 5s infinite linear;

@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import AddUserModal from "../AddUserModal/AddUserModal";
 import DeleteUserModal from "./../DeleteUserModal/DeleteUserModal";
+import EditUserModal from "../EditUserModal/EditUserModal";
 
 const API_BASE = "https://jsonplaceholder.typicode.com";
 
-// Cleans the phone number to only contain numbers and be 10 digits
 const cleanPhone = (phone) => phone.replace(/[^0-9]/g, "").substring(0, 10);
 
 const UserManagement = () => {
@@ -47,6 +47,15 @@ const UserManagement = () => {
         });
     };
 
+
+    const updateUser = (updatedUser) => {
+        const updatedUsers = users.map(user => (user.id === updatedUser.id ? updatedUser : user));
+        setUsers(updatedUsers);
+        setSelectedUser(null);
+    };
+    
+
+
     const deleteUser = () => {
         const deletedUserId = selectedUserId;
         const promise = fetch(`${API_BASE}/users/${deletedUserId}`, {
@@ -69,6 +78,7 @@ const UserManagement = () => {
 
     return (
         <div className="container">
+
             {loading && <p>Loading users...</p>}
             {!loading && (
                 <div className="row g-4">
@@ -146,7 +156,24 @@ const UserManagement = () => {
                                                     {user.website}
                                                 </a>
                                             </td>
+
                                             <td>
+    {/* Edit button */}
+    <button
+        type="button"
+        className="btn btn-link"
+        onClick={() => setSelectedUserId(user.id)}
+        data-bs-toggle="modal"
+        data-bs-target="#editUsermodal"
+    >
+        📝
+    </button>
+</td>
+
+
+                                            <td>
+                                     
+                                        
                                                 <a
                                                     type="button"
                                                     data-bs-toggle="modal"
@@ -187,6 +214,9 @@ const UserManagement = () => {
             )}
 
             <AddUserModal addUser={addUser} />
+
+            
+            
             <DeleteUserModal
                 deleteUser={deleteUser}
                 selectedUser={selectedUser}
