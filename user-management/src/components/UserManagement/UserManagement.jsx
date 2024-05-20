@@ -158,22 +158,18 @@ const UserManagement = () => {
                                             </td>
 
                                             <td>
-    {/* Edit button */}
-    <button
-        type="button"
-        className="btn btn-link"
-        onClick={() => setSelectedUserId(user.id)}
-        data-bs-toggle="modal"
-        data-bs-target="#editUsermodal"
-    >
-        📝
-    </button>
-</td>
-
-
-                                            <td>
-                                     
-                                        
+                       {/* Edit button */}
+                       <button
+                                  type="button"
+                                  className="btn btn-link"
+                                  onClick={() => setSelectedUserId(user.id)}
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#editUsermodal"
+                          >
+                                    📝
+                    </button>
+                 </td>
+                                            <td>                                                                           
                                                 <a
                                                     type="button"
                                                     data-bs-toggle="modal"

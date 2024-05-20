@@ -16,10 +16,7 @@
     animation: hue 5s infinite linear;
   }
 
-  .container {
-    text-align: center;
-    justify-content: center;
-  }
+  
 
   @keyframes hue {
     from {
