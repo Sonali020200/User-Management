@@ -1,66 +1,88 @@
-import { Flex, Text, Button } from "@chakra-ui/react";
-import { GrPrevious, GrNext } from "react-icons/gr";
-import React from "react";
+import { useEffect, useState } from "react";
 import {
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-} from "@chakra-ui/react";
-const Pagination = ({
-  page,
-  limit,
-  totalCount,
-  setPage,
-  handleLimitChange,
-}) => (
-  <Flex
-    justify="flex-end"
-    align="center"
-    color="fontColorGrey"
-    mt="1em"
-    flexDir={["column", "column", "row", "row"]}
-  >
-    <Flex align="center" color="fontColorGrey" ml={2}>
-      <Text>Rows per page</Text>
-      <NumberInput
-        size="sm"
-        maxW="20"
-        step={1}
-        value={limit}
-        min={2}
-        max={10}
-        onChange={(valueString) => handleLimitChange(valueString)}
-        ml={2}
-      >
-        <NumberInputField />
-        <NumberInputStepper>
-          <NumberIncrementStepper color="headingColorwhite" />
-          <NumberDecrementStepper color="headingColorwhite" />
-        </NumberInputStepper>
-      </NumberInput>
-    </Flex>
-    <Flex justify="center" align="center" gap="5px">
-      <Button
-        isDisabled={1 === page}
-        onClick={() => setPage((prev) => prev - 1)}
-        size="xs"
-      >
-        <GrPrevious />
-      </Button>
-      <Text fontSize="1.5em" color="headingColorWhite">
-        {page}
-      </Text>
-      <Button
-        isDisabled={Math.ceil(totalCount / limit) === page}
-        onClick={() => setPage((prev) => prev + 1)}
-        size="xs"
-      >
-        <GrNext />
-      </Button>
-    </Flex>
-  </Flex>
-);
+  Pagination as AntdPagination,
+  ConfigProvider,
+  notification,
+} from "antd";
+import { useNavigate, useLocation } from "react-router-dom";
 
-export default Pagination;
+
+const UserPagination = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const initialPage = { current: 1, limit: 10, total: 0 };
+
+ 
+  const [pagination, setPagination] = useState(initialPage);
+  
+
+  useEffect(() => {
+    fetchData();
+  }, [location]);
+
+  useEffect(() => {
+    const searchSlow = setTimeout(() => {
+      fetchData();
+    }, 500);
+    return () => clearTimeout(searchSlow);
+  }, [searchQuery, pagination.current, pagination.limit]);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch(
+        `https://jsonplaceholder.typicode.com/users/search?q=${searchQuery}&skip=${
+          (pagination.current - 1) * pagination.limit
+        }&limit=${pagination.limit}`
+      );
+
+      if (!res.ok) {
+        notification.error({
+          placement: "bottomLeft",
+          message: "Failed to fetch data",
+          description: "ERROR 404",
+        });
+        // throw new Error("Failed to fetch data");
+      }
+
+      const data = await res.json();
+
+      const { users, total } = data;
+      setUsers(users);
+      setPagination((prevPagination) => ({
+        ...prevPagination,
+        total,
+      }));
+      
+    
+    } catch (err) {
+      console.error(err);
+      
+    }
+  };
+
+  const handlePageChange = (page, limit) => {
+    setPagination((prev) => ({
+      ...prev,
+      current: page,
+      limit,
+    }));
+    navigate(`?page=${page}`);
+  };
+
+  return (
+    <ConfigProvider prefixCls="my-antd">
+      <div className="pagination">
+        <AntdPagination
+          current={pagination.current}
+          pageSize={pagination.limit}
+          total={pagination.total}
+          onChange={handlePageChange}
+        />
+      </div>
+    </ConfigProvider>
+  );
+};
+
+export default UserPagination;

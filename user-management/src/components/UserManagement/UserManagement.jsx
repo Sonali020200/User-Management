@@ -12,6 +12,7 @@ const UserManagement = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedUserId, setSelectedUserId] = useState(null);
+    const [editingUserId, setEditingUserId] = useState(null);
     const selectedUser = users.find((user) => user.id === selectedUserId);
 
     const fetchUsers = async () => {

@@ -7,6 +7,7 @@ import EditUserModal from "./components/EditUserModal/EditUserModal";
 import "./App.css";
 import Modal from 'react-modal';
 import Pagination from "./components/Pagination";
+import UserPagination from "./components/Pagination";
 
 Modal.setAppElement('#root');
 
@@ -24,7 +25,7 @@ const App = () => {
                 <UserManagement setEditUser={setEditUser} />
                 <EditUserModal user={editUser} updateUser={setEditUser} />
             </main>
-            <Pagination />
+           
 
             <Footer />
            
